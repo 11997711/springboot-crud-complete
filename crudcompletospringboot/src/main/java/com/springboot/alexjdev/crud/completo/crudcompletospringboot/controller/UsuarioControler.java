@@ -22,71 +22,81 @@ import com.springboot.alexjdev.crud.completo.crudcompletospringboot.repository.U
 
 @RestController
 public class UsuarioControler {
-	
-	@Autowired //Injeção de dependencia
+
+	@Autowired // Injeção de dependencia
 	private UsuarioRepository usuarioRepository;
-	
+
 	@RequestMapping(value = "/helloworld/{name}")
 	@ResponseStatus(HttpStatus.OK)
 	public String helloWorld(@PathVariable String name) {
-		
+
 		UsuarioModel usuarioModel = new UsuarioModel();
 		usuarioModel.setNome(name);
-		usuarioRepository.save(usuarioModel); //save , grava no banco de dados
-		
-		return "Hello World " +name+ " the best";
+		usuarioRepository.save(usuarioModel); // save , grava no banco de dados
+
+		return "Hello World " + name + " the best";
 	}
-	
+
 	@GetMapping(value = "/listartodos")
 	@ResponseBody // Retorna os dados para o corpo da resposta
-	public ResponseEntity<List<UsuarioModel>> listaUsuario(){
-		
-	   List<UsuarioModel> usuarios = usuarioRepository.findAll(); // executa a consulta no banco de dados 
-	
-	   return new ResponseEntity<List<UsuarioModel>>(usuarios, HttpStatus.OK); //Retorna a lista em JSON
+	public ResponseEntity<List<UsuarioModel>> listaUsuario() {
+
+		List<UsuarioModel> usuarios = usuarioRepository.findAll(); // executa a consulta no banco de dados
+
+		return new ResponseEntity<List<UsuarioModel>>(usuarios, HttpStatus.OK); // Retorna a lista em JSON
 	}
-	
+
 	@PostMapping(value = "/salvar") // Faz o mapeamento da URL
 	@ResponseBody // Descrição da resposta
-	public ResponseEntity<UsuarioModel> salvar(@RequestBody UsuarioModel usuarioModel){ //@RequestBody recebe os dados para salvar
-		
-		UsuarioModel user =  usuarioRepository.save(usuarioModel);
-		
+	public ResponseEntity<UsuarioModel> salvar(@RequestBody UsuarioModel usuarioModel) { // @RequestBody recebe os dados
+																							// para salvar
+
+		UsuarioModel user = usuarioRepository.save(usuarioModel);
+
 		return new ResponseEntity<UsuarioModel>(user, HttpStatus.CREATED);
 	}
-	
+
 	@DeleteMapping(value = "/deletar")
-	public ResponseEntity<String> delete(@RequestParam Long iduser ){
-		
-		 usuarioRepository.deleteById(iduser);
-		
+	public ResponseEntity<String> delete(@RequestParam Long iduser) {
+
+		usuarioRepository.deleteById(iduser);
+
 		return new ResponseEntity<String>("Usuario deletado com sucesso", HttpStatus.OK);
-		
-		
+
 	}
-	
+
 	@GetMapping(value = "/buscaruserid") // mapeia a URL
-	public ResponseEntity<UsuarioModel> buscarUserPorId(@RequestParam Long iduser ){ // Recebe os dados para consultar
-		
+	public ResponseEntity<UsuarioModel> buscarUserPorId(@RequestParam Long iduser) { // Recebe os dados para consultar
+
 		UsuarioModel user = usuarioRepository.findById(iduser).get();
-		
+
 		return new ResponseEntity<UsuarioModel>(user, HttpStatus.OK);
-		
-		
+
 	}
-	
+
 	@PutMapping(value = "/atualizar") // Faz o mapeamento da URL
 	@ResponseBody // Descrição da resposta
-	public ResponseEntity<?> atualizar(@RequestBody UsuarioModel usuarioModel){ //@RequestBody recebe os dados para salvar
-		
-		if(usuarioModel.getId() == null) {
+	public ResponseEntity<?> atualizar(@RequestBody UsuarioModel usuarioModel) { // @RequestBody recebe os dados para
+																					// salvar
+
+		if (usuarioModel.getId() == null) {
 			return new ResponseEntity<String>("Necessário informar o ID para a atualização", HttpStatus.OK);
 		}
-		
-		
-		UsuarioModel user =  usuarioRepository.saveAndFlush(usuarioModel);
-		
+
+		UsuarioModel user = usuarioRepository.saveAndFlush(usuarioModel);
+
 		return new ResponseEntity<UsuarioModel>(user, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/buscarpornome") // mapeia a URL
+	public ResponseEntity<List<UsuarioModel>> buscarPorNome(@RequestParam String name) { // Recebe os dados para
+																							// consultar
+
+		@SuppressWarnings("unchecked")
+		List<UsuarioModel> user =  usuarioRepository.buscarPorNome(name);
+
+		return new ResponseEntity<List<UsuarioModel>>(user, HttpStatus.OK);
+
 	}
 
 }
