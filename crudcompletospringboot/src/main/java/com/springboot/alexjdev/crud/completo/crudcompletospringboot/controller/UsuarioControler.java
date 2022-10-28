@@ -58,7 +58,7 @@ public class UsuarioControler {
 
 	@DeleteMapping(value = "/deletar")
 	public ResponseEntity<String> delete(@RequestParam Long iduser) {
-
+		
 		usuarioRepository.deleteById(iduser);
 
 		return new ResponseEntity<String>("Usuario deletado com sucesso", HttpStatus.OK);
