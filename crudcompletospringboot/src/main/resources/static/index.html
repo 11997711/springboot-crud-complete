@@ -28,9 +28,23 @@
 			<input type="number" class="form-control" id="idade" placeholder="informe a sua idade">
 		</div>
 
-
-
 	</form>
+
+	<button type="button" class="btn btn-primary" onclick="salvarUsuario()">Salvar</button>
+
+	<!-- Jquery abaixo -->
+	<script src="https://code.jquery.com/jquery-3.6.1.min.js"
+		integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+	<script type="text/javascript">
+		function salvarUsuario() {
+			var id = $("#id").val()
+			var nome = $("#nome").val()
+			var idade = $("#idade").val()
+
+			alert(nome + " salvo com sucesso " + " e você tem " + idade + " anos")
+		}
+	</script>
 
 	<!-- Optional JavaScript; choose one of the two! -->
 
