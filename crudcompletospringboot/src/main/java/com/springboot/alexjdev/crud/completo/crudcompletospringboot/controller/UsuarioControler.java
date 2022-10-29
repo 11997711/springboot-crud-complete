@@ -46,7 +46,7 @@ public class UsuarioControler {
 		return new ResponseEntity<List<UsuarioModel>>(usuarios, HttpStatus.OK); // Retorna a lista em JSON
 	}
 
-	@PostMapping(value = "/salvar") // Faz o mapeamento da URL
+	@PostMapping(value = "salvar") // Faz o mapeamento da URL
 	@ResponseBody // Descrição da resposta
 	public ResponseEntity<UsuarioModel> salvar(@RequestBody UsuarioModel usuarioModel) { // @RequestBody recebe os dados
 																							// para salvar

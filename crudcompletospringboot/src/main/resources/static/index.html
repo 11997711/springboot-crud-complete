@@ -14,12 +14,12 @@
 
 	<form action="" id="formCadastroUser">
 		<div class="mb-3">
-			<label for="id" class="form-label">Id</label>
+			<label for="id" class="form-label">Id Usuario</label>
 			<input type="text" class="form-control" id="id" readonly="readonly">
 		</div>
 
 		<div class="mb-3">
-			<label for="nome" class="form-label">Nome</label>
+			<label for="nome" class="form-label">Nome Usuario</label>
 			<input type="text" class="form-control" id="nome" placeholder="informe o nome" required="required">
 		</div>
 
@@ -31,6 +31,7 @@
 	</form>
 
 	<button type="button" class="btn btn-primary" onclick="salvarUsuario()">Salvar</button>
+	<button type="button" class="btn btn-secondary" onclick="document.getElementById('formCadastroUser').reset();">Novo Usuario</button>
 
 	<!-- Jquery abaixo -->
 	<script src="https://code.jquery.com/jquery-3.6.1.min.js"
@@ -38,14 +39,29 @@
 
 	<script type="text/javascript">
 		function salvarUsuario() {
-			var id = $("#id").val()
-			var nome = $("#nome").val()
-			var idade = $("#idade").val()
+			var id =    $("#id").val();
+			var nome =  $("#nome").val();
+			var idade = $("#idade").val();
 
-			alert(nome + " salvo com sucesso " + " e você tem " + idade + " anos")
+			alert("Usuario :" + nome + " salvo com sucesso , você tem " + idade + " anos")
+			
+			$.ajax({
+				method: "POST",
+				url: "salvar",
+				data: JSON.stringify({id: id, nome: nome, idade: idade}),
+				contentType: "application/json; charset-utf-8",
+				success: function(response){
+					alert("Usuario cadastrado com sucesso" )
+				}
+			
+						
+			}).fail (function(xhr, status, errorThrow){
+				alert("Erro ao salvar usuário" +xhr.responseText)
+			});
 		}
 	</script>
 
+	
 	<!-- Optional JavaScript; choose one of the two! -->
 
 	<!-- Option 1: Bootstrap Bundle with Popper -->
