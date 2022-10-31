@@ -31,37 +31,135 @@
 	</form>
 
 	<button type="button" class="btn btn-primary" onclick="salvarUsuario()">Salvar</button>
-	<button type="button" class="btn btn-secondary" onclick="document.getElementById('formCadastroUser').reset();">Novo Usuario</button>
+	<button type="button" class="btn btn-secondary" onclick="document.getElementById('formCadastroUser').reset();">Novo
+		Usuario</button>
+	<button type="button" class="btn btn-danger" data-bs-toggle="modal"
+		data-bs-target="#modalPesquisarUser">Pesquisar</button>
+
+
+	<div class="modal fade" id="modalPesquisarUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Pesquisar Usuario</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group">
+							<label for="name-busca" class="col-form-label">Informe o Nome:</label>
+							<input type="text" class="form-control" id="name-busca">
+						</div>
+						<button type="button" class="btn btn-success" onclick="pesquisarUser()">Buscar</button>
+
+					</form>
+
+					<table class="table" id="tabelaresultados">
+						<thead>
+							<tr>
+								<th scope="col">Id</th>
+								<th scope="col">Nome</th>
+								<th scope="col">Editar</th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
+					</table>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 
 	<!-- Jquery abaixo -->
 	<script src="https://code.jquery.com/jquery-3.6.1.min.js"
 		integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 
 	<script type="text/javascript">
+
+		function pesquisarUser() {
+			var nome = $("name-busca").val();
+
+			if (nome != null && nome.trim() != '') {
+
+				$.ajax({
+					method: "GET",
+					url: "buscarpornome",
+					data: "name = " + nome,
+					success: function (response) {
+						$('#tabelaresultados > tbody > tr').remove();
+
+						for (var i = 0; i < response.lenght; i++) {
+							$('#tabelaresultados > tbody').append('<tr><td>' + response[i].id + '</td><td>' + response[i].nome + '</td><td><button type="button" onclick="colocarEmEdicao(' + response[i].id + ')" class="btn btn-primary">Visualizar</button></td></tr>')
+						}
+					}
+
+
+				}).fail(function (xhr, status, errorThrow) {
+					alert("Erro ao buscar usuário" + xhr.responseText)
+				});
+
+			}
+		}
+
+		function colocarEmEdicao(id) {
+
+			$.ajax({
+				method: "GET",
+				url: "buscaruserid",
+				data: "iduser = " + id,
+				success: function (response) {
+
+					 id = $("#id").val(response.id);
+					 nome = $("#nome").val(response.nome);
+					 idade = $("#idade").val(response.idade);
+					 
+					 $('#modalPesquisarUser').modal('hide');
+
+
+				}
+			}).fail(function (xhr, status, errorThrow) {
+				alert("Erro ao buscar usuário por ID" + xhr.responseText)
+			});
+
+
+		}
+
+
+
 		function salvarUsuario() {
-			var id =    $("#id").val();
-			var nome =  $("#nome").val();
+			var id = $("#id").val();
+			var nome = $("#nome").val();
 			var idade = $("#idade").val();
 
 			alert("Usuario :" + nome + " salvo com sucesso , você tem " + idade + " anos")
-			
+
 			$.ajax({
 				method: "POST",
 				url: "salvar",
 				data: JSON.stringify({id: id, nome: nome, idade: idade}),
 				contentType: "application/json; charset-utf-8",
-				success: function(response){
-					alert("Usuario cadastrado com sucesso" )
+				success: function (response) {
+					alert("Usuario cadastrado com sucesso")
 				}
-			
-						
-			}).fail (function(xhr, status, errorThrow){
-				alert("Erro ao salvar usuário" +xhr.responseText)
+
+
+			}).fail(function (xhr, status, errorThrow) {
+				alert("Erro ao salvar usuário" + xhr.responseText)
 			});
 		}
 	</script>
 
-	
+
 	<!-- Optional JavaScript; choose one of the two! -->
 
 	<!-- Option 1: Bootstrap Bundle with Popper -->
